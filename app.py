@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 # Mengimpor fungsi yang benar: initialize_models dan generate_response
 from model import initialize_models, generate_response 
 import json
@@ -8,6 +9,7 @@ import json
 # ====================================================================
 
 app = Flask(__name__)
+CORS(app)
 
 # ====================================================================
 # 2. ENDPOINT PREDIKSI
