@@ -6,11 +6,7 @@ import numpy as np
 import os
 import pickle
 
-# ====================================================================
-# KONSTANTA DAN PARAMETER MODEL
-# ====================================================================
 
-# Parameter yang sama seperti yang Anda definisikan
 HIDDEN_DIM = 100
 EMBED_DIM = 64
 DROPOUT = 0.2
@@ -21,11 +17,8 @@ TOKENIZER_PATH = 'tokenizer.pkl' # Asumsi Anda menyimpan tokenizer
 encoder_model = None
 decoder_model = None
 
-# ====================================================================
-# 1. PARAMETER DATA (WAJIB DIISI SEBELUM DEPLOYMENT)
-# *** SINKRONISASI TOKEN DENGAN PREPROCESSING COLAB <START> dan <END> ***
-# ====================================================================
-VOCAB_SIZE = 1133        # Ganti dengan perkiraan awal atau nilai final Vokabulari
+
+VOCAB_SIZE = 1247        # Ganti dengan perkiraan awal atau nilai final Vokabulari
 maxlen_questions = 17     # <-- GANTI DENGAN NILAI MAXLEN QUESTIONS YANG TEPAT
 maxlen_answers = 25    # <-- GANTI DENGAN NILAI MAXLEN ANSWERS YANG TEPAT
 tokenizer = None          # Objek Keras Tokenizer Anda
@@ -51,8 +44,7 @@ def load_data_artifacts():
 
         except Exception as e:
             print(f"ERROR: Gagal memuat tokenizer: {e}. Menggunakan placeholder default.")
-            # Fallback jika loading gagal
-            VOCAB_SIZE = 1133
+            VOCAB_SIZE = 1247
             # Fallback menggunakan indeks yang sudah dikonfirmasi: 1=<START>, 2=<END>
             tokenizer_mock = { 'word_index': { START_TOKEN_WORD: 1, END_TOKEN_WORD: 2, 'hai': 3 } }
             index_to_word = {v: k for k, v in tokenizer_mock['word_index'].items()}
@@ -105,9 +97,6 @@ def create_model_architecture(vocab_size, embed_dim=EMBED_DIM, dropout_rate=DROP
     
     return full_model, enc_inputs, enc_outputs, enc_states, dec_inputs, dec_embedding_layer, dec_lstm, dec_dense
 
-# ====================================================================
-# 3. FUNGSI INFERENCE MODEL
-# ====================================================================
 
 def make_inference_models():
     """Membuat model Encoder dan Decoder terpisah untuk inference tanpa dropout."""
@@ -154,9 +143,6 @@ def make_inference_models():
 
     return enc_model, dec_model 
 
-# ====================================================================
-# 4. PREDIKSI UTAMA UNTUK API
-# ====================================================================
 
 def str_to_tokens(sentence: str):
     """Mengubah kalimat string menjadi sekuens token dan padding."""
@@ -232,10 +218,6 @@ def generate_response(input_text: str):
         step_count += 1
         
     return decoded_sentence.strip()
-
-# ====================================================================
-# 5. INISIALISASI MODEL (Hanya sekali saat startup)
-# ====================================================================
 
 def initialize_models():
     """Menginisialisasi dan memuat semua artefak yang dibutuhkan."""
