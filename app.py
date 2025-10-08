@@ -5,6 +5,16 @@ import json
 
 app = Flask(__name__)
 CORS(app)
+
+# Inisialisasi model hanya SEKALI saat aplikasi dimuat.
+# Ini memastikan Gunicorn akan memuat model saat startup.
+try:
+    print("Memulai inisialisasi model dan data...")
+    initialize_models()
+    print("Model siap.")
+except Exception as e:
+    print(f"[!] Gagal menginisialisasi model: {e}")
+
 @app.route('/predict', methods=['POST'])
 def predict():
     """
@@ -42,9 +52,7 @@ def home():
     return "API Seq2Seq Attention aktif. Gunakan endpoint /predict (POST) dengan payload {'text': '...'}"
 
 if __name__ == '__main__':
-    # Inisialisasi model hanya SEKALI saat server dimulai
-    print("Memulai inisialisasi model dan data...")
-    initialize_models()
-    print("Model siap. Menjalankan Flask App...")
-    
-    app.run(host='0.0.0.0', port=5000)
+    # Blok ini hanya untuk menjalankan server pengembangan (development)
+    # Gunicorn akan mengabaikan ini
+    print("Menjalankan Flask App di local server...")
+    app.run(host='0.0.0.0', port=5000, debug=True)
