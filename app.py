@@ -49,7 +49,7 @@ def predict():
 @app.route('/', methods=['GET'])
 def home():
     """Endpoint home sederhana."""
-    return "API Seq2Seq Attention aktif. Gunakan endpoint /predict (POST) dengan payload {'text': '...'}"
+    return "Welcome!"
 
 if __name__ == '__main__':
     # Blok ini hanya untuk menjalankan server pengembangan (development)
