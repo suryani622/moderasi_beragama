@@ -6,8 +6,6 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-# Inisialisasi model hanya SEKALI saat aplikasi dimuat.
-# Ini memastikan Gunicorn akan memuat model saat startup.
 try:
     print("Memulai inisialisasi model dan data...")
     initialize_models()
@@ -17,20 +15,15 @@ except Exception as e:
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    """
-    Endpoint untuk menerima teks input dan mengembalikan respons model.
-    Input JSON: {"text": "Bagaimana kabarmu?"}
-    """
     if not request.json or 'text' not in request.json:
         return jsonify({
             "success": False,
-            "error": "Permintaan tidak valid. Harap kirimkan JSON dengan kunci 'text'."
+            "error": "Permintaan tidak valid."
         }), 400
 
     input_text = request.json['text']
 
     try:
-        # Panggil fungsi prediksi
         result = generate_response(input_text)
 
         return jsonify({
@@ -49,11 +42,8 @@ def predict():
 
 @app.route('/', methods=['GET'])
 def home():
-    """Endpoint home sederhana."""
     return "Welcome!"
 
 if __name__ == '__main__':
-    # Blok ini hanya untuk menjalankan server pengembangan (development)
-    # Gunicorn akan mengabaikan ini
     print("Menjalankan Flask App di local server...")
     app.run(host='0.0.0.0', port=5000, debug=True)
