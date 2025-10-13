@@ -31,12 +31,13 @@ def predict():
 
     try:
         # Panggil fungsi prediksi
-        response_text = generate_response(input_text)
+        result = generate_response(input_text)
 
         return jsonify({
             "success": True,
             "input": input_text,
-            "response": response_text
+            "response": result["response_text"],
+            "sentiment": result["detected_sentiment"]
         })
     
     except Exception as e:
